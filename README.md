@@ -298,3 +298,6 @@ For questions or support, please open an issue on GitHub.
 ---
 
 **Made with ❤️ and AI**
+# ai-web-builder
+
+AI-powered web builder platform for creating modern web applications.
