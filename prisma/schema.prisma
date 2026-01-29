@@ -1,0 +1,193 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String         @id @default(cuid())
+  email         String         @unique
+  name          String?
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  
+  projects      Project[]
+  collaborations Collaborator[]
+  apiKeys       ApiKey[]
+  subscription  Subscription?
+
+  @@map("users")
+}
+
+model Project {
+  id          String    @id @default(cuid())
+  name        String
+  description String?
+  slug        String    @unique
+  userId      String
+  visibility  String    @default("private") // private, public, unlisted
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  
+  user         User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  versions     ProjectVersion[]
+  components   Component[]
+  pages        Page[]
+  assets       Asset[]
+  deployments  Deployment[]
+  collaborators Collaborator[]
+
+  @@index([userId])
+  @@map("projects")
+}
+
+model ProjectVersion {
+  id          String   @id @default(cuid())
+  projectId   String
+  version     String   // e.g., "1.0.0", "1.0.1"
+  description String?
+  code        Json     // Complete code snapshot
+  createdAt   DateTime @default(now())
+  
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@map("project_versions")
+}
+
+model Component {
+  id          String   @id @default(cuid())
+  projectId   String
+  name        String
+  type        String   // button, form, card, header, footer, etc.
+  code        String   @db.Text
+  props       Json?    // Component props schema
+  styles      String?  @db.Text
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@map("components")
+}
+
+model Page {
+  id          String   @id @default(cuid())
+  projectId   String
+  name        String
+  path        String   // e.g., "/", "/about", "/contact"
+  layout      String?  // Layout template name
+  code        String   @db.Text
+  seoTitle    String?
+  seoDescription String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, path])
+  @@index([projectId])
+  @@map("pages")
+}
+
+model Asset {
+  id          String   @id @default(cuid())
+  projectId   String
+  name        String
+  type        String   // image, video, font, etc.
+  url         String
+  size        Int      // in bytes
+  mimeType    String
+  createdAt   DateTime @default(now())
+  
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@map("assets")
+}
+
+model Deployment {
+  id          String   @id @default(cuid())
+  projectId   String
+  versionId   String?
+  url         String
+  status      String   // pending, building, deployed, failed
+  provider    String   // vercel, netlify, spaceship, etc.
+  createdAt   DateTime @default(now())
+  deployedAt  DateTime?
+  
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@map("deployments")
+}
+
+model Template {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  category    String   // landing-page, saas, blog, ecommerce, etc.
+  thumbnail   String?
+  code        Json     // Template structure
+  tags        String[]
+  featured    Boolean  @default(false)
+  usageCount  Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("templates")
+}
+
+model Subscription {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  plan        String   // free, pro, enterprise
+  status      String   // active, cancelled, past_due
+  startDate   DateTime @default(now())
+  endDate     DateTime?
+  
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("subscriptions")
+}
+
+model Collaborator {
+  id          String   @id @default(cuid())
+  projectId   String
+  userId      String
+  role        String   // owner, editor, viewer
+  invitedAt   DateTime @default(now())
+  
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, userId])
+  @@index([projectId])
+  @@index([userId])
+  @@map("collaborators")
+}
+
+model ApiKey {
+  id          String   @id @default(cuid())
+  userId      String
+  name        String
+  key         String   @unique
+  lastUsed    DateTime?
+  expiresAt   DateTime?
+  createdAt   DateTime @default(now())
+  
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("api_keys")
+}
