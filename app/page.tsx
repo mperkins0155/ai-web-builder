@@ -3,12 +3,20 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Sparkles, Code, Zap, Rocket, CheckCircle2 } from 'lucide-react'
+import { Sparkles, Code, Zap, Rocket, CheckCircle2, Copy, AlertCircle, Wand2 } from 'lucide-react'
+
+const EXAMPLE_PROMPTS = [
+  "Create a modern SaaS landing page with hero section, features grid, pricing table, and testimonials",
+  "Build a portfolio website for a photographer with a gallery, about section, and contact form",
+  "Design a blog homepage with featured posts, categories, and a newsletter signup",
+  "Create an e-commerce product landing page with product showcase, reviews, and purchase section",
+]
 
 export default function Home() {
   const [prompt, setPrompt] = useState('')
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<{ success: boolean; message?: string; code?: string } | null>(null)
+  const [copied, setCopied] = useState(false)
 
   const handleGenerate = async () => {
     if (!prompt.trim()) return
@@ -48,6 +56,19 @@ export default function Home() {
     } finally {
       setLoading(false)
     }
+  }
+
+  const handleCopyCode = async () => {
+    if (result?.code) {
+      await navigator.clipboard.writeText(result.code)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    }
+  }
+
+  const handleExampleClick = (example: string) => {
+    setPrompt(example)
+    setResult(null)
   }
 
   return (
@@ -93,23 +114,63 @@ export default function Home() {
           {/* AI Generation Demo */}
           <Card className="max-w-3xl mx-auto text-left shadow-xl">
             <CardHeader>
-              <CardTitle>Try It Now</CardTitle>
+              <CardTitle className="flex items-center gap-2">
+                <Wand2 className="h-5 w-5 text-indigo-600" />
+                Try It Now
+              </CardTitle>
               <CardDescription>
                 Describe the website you want to build
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <textarea
-                value={prompt}
-                onChange={(e) => setPrompt(e.target.value)}
-                placeholder="Example: Create a modern landing page for a SaaS startup with a hero section, features grid, pricing table, and contact form. Use a blue and purple gradient theme."
-                className="w-full h-32 p-4 rounded-lg border border-slate-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none resize-none"
-                disabled={loading}
-              />
+              {/* Example Prompts */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-slate-700">
+                  Need inspiration? Try these examples:
+                </label>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                  {EXAMPLE_PROMPTS.map((example, index) => (
+                    <button
+                      key={index}
+                      onClick={() => handleExampleClick(example)}
+                      className="text-left text-xs p-3 rounded-lg border border-slate-200 hover:border-indigo-400 hover:bg-indigo-50 transition-all"
+                      disabled={loading}
+                    >
+                      <div className="flex items-start gap-2">
+                        <Sparkles className="h-3 w-3 text-indigo-600 mt-0.5 flex-shrink-0" />
+                        <span className="text-slate-600 line-clamp-2">{example}</span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
 
+              {/* Prompt Input */}
+              <div className="relative">
+                <textarea
+                  value={prompt}
+                  onChange={(e) => setPrompt(e.target.value)}
+                  placeholder="Example: Create a modern landing page for a SaaS startup with a hero section, features grid, pricing table, and contact form. Use a blue and purple gradient theme."
+                  className="w-full h-32 p-4 rounded-lg border border-slate-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none resize-none"
+                  disabled={loading}
+                />
+                <div className="absolute bottom-3 right-3 text-xs text-slate-400">
+                  {prompt.length} characters
+                </div>
+              </div>
+
+              {/* Validation Feedback */}
+              {prompt.length > 0 && prompt.length < 10 && (
+                <div className="flex items-center gap-2 text-sm text-amber-600">
+                  <AlertCircle className="h-4 w-4" />
+                  Please provide a more detailed description (at least 10 characters)
+                </div>
+              )}
+
+              {/* Generate Button */}
               <Button
                 onClick={handleGenerate}
-                disabled={loading || !prompt.trim()}
+                disabled={loading || prompt.trim().length < 10}
                 className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
                 size="lg"
               >
@@ -126,6 +187,7 @@ export default function Home() {
                 )}
               </Button>
 
+              {/* Result Display */}
               {result && (
                 <div
                   className={`p-4 rounded-lg ${
@@ -138,20 +200,49 @@ export default function Home() {
                     {result.success ? (
                       <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5" />
                     ) : (
-                      <Code className="h-5 w-5 text-red-600 mt-0.5" />
+                      <AlertCircle className="h-5 w-5 text-red-600 mt-0.5" />
                     )}
                     <div className="flex-1">
                       <p
-                        className={
+                        className={`font-medium mb-2 ${
                           result.success ? 'text-green-800' : 'text-red-800'
-                        }
+                        }`}
                       >
                         {result.message}
                       </p>
                       {result.code && (
-                        <pre className="mt-2 text-xs bg-white p-3 rounded overflow-x-auto max-h-40">
-                          {result.code.substring(0, 500)}...
-                        </pre>
+                        <div className="mt-3 space-y-2">
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs font-medium text-green-700">
+                              Generated Code Preview
+                            </span>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={handleCopyCode}
+                              className="h-7 text-xs"
+                            >
+                              {copied ? (
+                                <>
+                                  <CheckCircle2 className="h-3 w-3" />
+                                  Copied!
+                                </>
+                              ) : (
+                                <>
+                                  <Copy className="h-3 w-3" />
+                                  Copy Code
+                                </>
+                              )}
+                            </Button>
+                          </div>
+                          <pre className="text-xs bg-slate-900 text-green-400 p-4 rounded-lg overflow-x-auto max-h-60 font-mono">
+                            {result.code.substring(0, 1000)}
+                            {result.code.length > 1000 && '\n\n... (truncated)'}
+                          </pre>
+                          <p className="text-xs text-green-700">
+                            Total code length: {result.code.length} characters
+                          </p>
+                        </div>
                       )}
                     </div>
                   </div>
@@ -174,7 +265,7 @@ export default function Home() {
         </div>
 
         <div className="grid md:grid-cols-3 gap-8">
-          <Card>
+          <Card className="hover:shadow-lg transition-shadow">
             <CardHeader>
               <div className="h-12 w-12 rounded-lg bg-indigo-100 flex items-center justify-center mb-4">
                 <Sparkles className="h-6 w-6 text-indigo-600" />
@@ -186,7 +277,7 @@ export default function Home() {
             </CardHeader>
           </Card>
 
-          <Card>
+          <Card className="hover:shadow-lg transition-shadow">
             <CardHeader>
               <div className="h-12 w-12 rounded-lg bg-purple-100 flex items-center justify-center mb-4">
                 <Code className="h-6 w-6 text-purple-600" />
@@ -198,7 +289,7 @@ export default function Home() {
             </CardHeader>
           </Card>
 
-          <Card>
+          <Card className="hover:shadow-lg transition-shadow">
             <CardHeader>
               <div className="h-12 w-12 rounded-lg bg-pink-100 flex items-center justify-center mb-4">
                 <Zap className="h-6 w-6 text-pink-600" />
@@ -212,9 +303,75 @@ export default function Home() {
         </div>
       </section>
 
+      {/* How It Works Section */}
+      <section className="container mx-auto px-4 py-20 bg-white/50 rounded-3xl my-20">
+        <div className="max-w-4xl mx-auto">
+          <h3 className="text-3xl md:text-4xl font-bold mb-12 text-center">
+            How It Works
+          </h3>
+          <div className="space-y-8">
+            <div className="flex items-start gap-4">
+              <div className="flex-shrink-0 h-12 w-12 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold">
+                1
+              </div>
+              <div>
+                <h4 className="text-xl font-semibold mb-2">Describe Your Vision</h4>
+                <p className="text-slate-600">
+                  Tell us what kind of website you want in plain English. Be as detailed or as brief as you like.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start gap-4">
+              <div className="flex-shrink-0 h-12 w-12 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold">
+                2
+              </div>
+              <div>
+                <h4 className="text-xl font-semibold mb-2">AI Generates Code</h4>
+                <p className="text-slate-600">
+                  Our AI analyzes your description and creates production-ready React components with TypeScript and Tailwind CSS.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start gap-4">
+              <div className="flex-shrink-0 h-12 w-12 rounded-full bg-pink-600 text-white flex items-center justify-center font-bold">
+                3
+              </div>
+              <div>
+                <h4 className="text-xl font-semibold mb-2">Preview & Deploy</h4>
+                <p className="text-slate-600">
+                  See your website instantly, make adjustments with AI chat, and deploy with one click.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Stats Section */}
+      <section className="container mx-auto px-4 py-20">
+        <div className="grid md:grid-cols-4 gap-8 text-center">
+          <div>
+            <div className="text-4xl font-bold text-indigo-600 mb-2">10k+</div>
+            <div className="text-slate-600">Websites Generated</div>
+          </div>
+          <div>
+            <div className="text-4xl font-bold text-purple-600 mb-2">99%</div>
+            <div className="text-slate-600">Code Quality Score</div>
+          </div>
+          <div>
+            <div className="text-4xl font-bold text-pink-600 mb-2">&lt;30s</div>
+            <div className="text-slate-600">Average Generation Time</div>
+          </div>
+          <div>
+            <div className="text-4xl font-bold text-indigo-600 mb-2">24/7</div>
+            <div className="text-slate-600">AI Availability</div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="container mx-auto px-4 py-20">
-        <Card className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white border-0">
+        <Card className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white border-0 shadow-2xl">
           <CardContent className="py-16 text-center">
             <h3 className="text-3xl md:text-4xl font-bold mb-4">
               Ready to Build Your Dream Website?
@@ -222,11 +379,13 @@ export default function Home() {
             <p className="text-xl mb-8 text-indigo-100">
               Join thousands of creators using AI to bring their ideas to life
             </p>
-            <div className="flex gap-4 justify-center">
-              <Button size="lg" variant="secondary">
+            <div className="flex gap-4 justify-center flex-wrap">
+              <Button size="lg" variant="secondary" className="shadow-lg">
+                <Rocket className="h-5 w-5" />
                 Get Started Free
               </Button>
               <Button size="lg" variant="outline" className="bg-transparent border-white text-white hover:bg-white/10">
+                <Code className="h-5 w-5" />
                 View Documentation
               </Button>
             </div>
@@ -237,10 +396,12 @@ export default function Home() {
       {/* Footer */}
       <footer className="border-t bg-white/80 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-8">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between flex-wrap gap-4">
             <div className="flex items-center gap-2">
               <Sparkles className="h-5 w-5 text-indigo-600" />
               <span className="font-semibold text-slate-900">AI Web Builder</span>
+              <span className="text-slate-400">·</span>
+              <span className="text-sm text-slate-500">Made with ❤️ and AI</span>
             </div>
             <p className="text-sm text-slate-500">
               Built with Next.js, TypeScript, and AI

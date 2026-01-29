@@ -9,14 +9,33 @@ import type {
   AIMessage,
 } from '@/lib/types'
 
-// Initialize AI clients
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-})
+// Initialize AI clients lazily to avoid build-time errors
+let openaiInstance: OpenAI | null = null
+let anthropicInstance: Anthropic | null = null
 
-const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
-})
+function getOpenAI(): OpenAI {
+  if (!openaiInstance) {
+    if (!process.env.OPENAI_API_KEY) {
+      throw new Error('OPENAI_API_KEY is not configured')
+    }
+    openaiInstance = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    })
+  }
+  return openaiInstance
+}
+
+function getAnthropic(): Anthropic {
+  if (!anthropicInstance) {
+    if (!process.env.ANTHROPIC_API_KEY) {
+      throw new Error('ANTHROPIC_API_KEY is not configured')
+    }
+    anthropicInstance = new Anthropic({
+      apiKey: process.env.ANTHROPIC_API_KEY,
+    })
+  }
+  return anthropicInstance
+}
 
 // Validation schema for code generation
 const IntentSchema = z.object({
@@ -104,7 +123,7 @@ Respond in JSON format matching this structure:
       },
     ]
 
-    const response = await anthropic.messages.create({
+    const response = await getAnthropic().messages.create({
       model: 'claude-3-5-sonnet-20241022',
       max_tokens: 1024,
       messages: messages.map((msg) => ({
@@ -156,7 +175,7 @@ Components: ${context.components.join(', ')}
 
 Generate the main page component with all these elements integrated.`
 
-    const completion = await openai.chat.completions.create({
+    const completion = await getOpenAI().chat.completions.create({
       model: 'gpt-4-turbo-preview',
       messages: [
         { role: 'system', content: systemPrompt },
@@ -230,7 +249,7 @@ Generate the main page component with all these elements integrated.`
   ): Promise<string> {
     const errorMessages = errors.map((e) => e.message).join('\n')
 
-    const completion = await openai.chat.completions.create({
+    const completion = await getOpenAI().chat.completions.create({
       model: 'gpt-4-turbo-preview',
       messages: [
         {
@@ -257,7 +276,7 @@ Generate the main page component with all these elements integrated.`
     description: string,
     style: string = 'modern'
   ): Promise<string> {
-    const completion = await openai.chat.completions.create({
+    const completion = await getOpenAI().chat.completions.create({
       model: 'gpt-4-turbo-preview',
       messages: [
         {
@@ -280,7 +299,7 @@ Generate the main page component with all these elements integrated.`
    * Refine existing code based on feedback
    */
   async refineCode(code: string, feedback: string): Promise<string> {
-    const completion = await openai.chat.completions.create({
+    const completion = await getOpenAI().chat.completions.create({
       model: 'gpt-4-turbo-preview',
       messages: [
         {
