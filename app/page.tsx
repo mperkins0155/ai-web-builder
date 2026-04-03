@@ -48,7 +48,7 @@ export default function Home() {
           message: data.error || 'Failed to generate website',
         })
       }
-    } catch (error) {
+    } catch {
       setResult({
         success: false,
         message: 'An error occurred. Please try again.',
