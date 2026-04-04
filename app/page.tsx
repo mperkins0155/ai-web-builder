@@ -12,6 +12,15 @@ const EXAMPLE_PROMPTS = [
   "Create an e-commerce product landing page with product showcase, reviews, and purchase section",
 ]
 
+/**
+ * Root client-side page component that renders the AI Web Builder interface.
+ *
+ * Provides a UI for entering natural-language prompts, triggering site generation
+ * (POST /api/ai/generate), displaying success/error results and a code preview,
+ * and copying generated code to the clipboard.
+ *
+ * @returns The rendered JSX element for the Home page.
+ */
 export default function Home() {
   const [prompt, setPrompt] = useState('')
   const [loading, setLoading] = useState(false)
