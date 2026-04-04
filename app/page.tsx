@@ -1,15 +1,46 @@
 'use client'
 
 import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Sparkles, Code, Zap, Rocket, CheckCircle2, Copy, AlertCircle, Wand2 } from 'lucide-react'
+import {
+  LayoutGrid,
+  Globe,
+  ShoppingCart,
+  Calendar,
+  Megaphone,
+  Users,
+  FileText,
+  CreditCard,
+  BarChart3,
+  UserCog,
+  Puzzle,
+  Settings,
+  X,
+  Menu,
+  Eye,
+  Bell,
+  Moon,
+} from 'lucide-react'
 
-const EXAMPLE_PROMPTS = [
-  "Create a modern SaaS landing page with hero section, features grid, pricing table, and testimonials",
-  "Build a portfolio website for a photographer with a gallery, about section, and contact form",
-  "Design a blog homepage with featured posts, categories, and a newsletter signup",
-  "Create an e-commerce product landing page with product showcase, reviews, and purchase section",
+const navItems = [
+  { label: 'Overview', icon: LayoutGrid, active: true },
+  { label: 'Website Builder', icon: Globe },
+  { label: 'Online Store', icon: ShoppingCart },
+  { label: 'Appointments', icon: Calendar },
+  { label: 'Marketing', icon: Megaphone },
+  { label: 'CRM / Contacts', icon: Users },
+  { label: 'Invoicing', icon: FileText },
+  { label: 'Payments', icon: CreditCard },
+  { label: 'Analytics', icon: BarChart3 },
+  { label: 'Team', icon: UserCog },
+  { label: 'Integrations', icon: Puzzle },
+  { label: 'Settings', icon: Settings },
+]
+
+const stats = [
+  { label: 'Total Revenue', value: '$13,240', icon: '$' },
+  { label: 'Site Visitors', value: '3,847', icon: '◉' },
+  { label: 'Orders', value: '68', icon: '◌' },
+  { label: 'Appointments', value: '12', icon: '⌁' },
 ]
 
 /**
@@ -79,345 +110,115 @@ export default function Home() {
     setPrompt(example)
     setResult(null)
   }
+  const [sidebarOpen, setSidebarOpen] = useState(true)
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
-      {/* Header */}
-      <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Sparkles className="h-6 w-6 text-indigo-600" />
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-              AI Web Builder
-            </h1>
+    <div className="min-h-screen bg-[#f4f4f1] text-[#081513]">
+      <div className="mx-auto w-full max-w-[1400px] px-3 py-4 sm:px-6 sm:py-6">
+        <header className="mb-4 flex items-center justify-between rounded-2xl bg-[#f9f9f7] px-4 py-3 sm:px-6">
+          <div className="text-2xl font-semibold tracking-tight">two7-platform</div>
+          <div className="flex items-center gap-2 sm:gap-3">
+            <button
+              onClick={() => setSidebarOpen((prev) => !prev)}
+              className="rounded-xl border border-[#d8d8d2] bg-white p-2.5 text-[#1c2e2a]"
+              aria-label="Toggle sidebar"
+            >
+              {sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
+            <button className="hidden items-center gap-2 rounded-xl border border-[#d8d8d2] bg-white px-3 py-2 text-sm text-[#3a4f4a] sm:flex">
+              <Eye className="h-4 w-4" /> 1
+            </button>
+            <button className="rounded-xl bg-[#081513] px-4 py-2.5 text-sm font-medium text-white">Customize</button>
           </div>
-          <nav className="flex gap-4">
-            <Button variant="ghost">Features</Button>
-            <Button variant="ghost">Docs</Button>
-            <Button>Sign In</Button>
-          </nav>
-        </div>
-      </header>
+        </header>
 
-      {/* Hero Section */}
-      <section className="container mx-auto px-4 py-20 text-center">
-        <div className="max-w-4xl mx-auto space-y-8">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-100 text-indigo-700 text-sm font-medium">
-            <Sparkles className="h-4 w-4" />
-            Powered by GPT-4 & Claude 3.5 Sonnet
-          </div>
+        <div className="relative overflow-hidden rounded-3xl border border-[#d6d7d1] bg-white shadow-[0_16px_50px_rgba(5,28,22,0.08)]">
+          <div className="flex min-h-[760px]">
+            <aside
+              className={`z-20 w-[320px] shrink-0 border-r border-[#07563f] bg-[#013c2e] text-white transition-all duration-300 sm:w-[360px] ${
+                sidebarOpen ? 'translate-x-0' : '-ml-[320px] sm:-ml-[360px]'
+              }`}
+            >
+              <div className="flex h-[88px] items-center justify-between border-b border-[#0f5d49] px-6">
+                <div className="text-4xl font-black tracking-tight">
+                  Two7<span className="text-[#2dd39a]">.design</span>
+                </div>
+                <button
+                  onClick={() => setSidebarOpen(false)}
+                  className="rounded-xl bg-[#0f5d49]/55 p-3 text-[#96cbbd]"
+                  aria-label="Close sidebar"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
 
-          <h2 className="text-5xl md:text-7xl font-bold leading-tight">
-            Build Stunning Websites
-            <br />
-            <span className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
-              With Just Words
-            </span>
-          </h2>
+              <nav className="space-y-1.5 px-4 py-4">
+                {navItems.map(({ label, icon: Icon, active }) => (
+                  <button
+                    key={label}
+                    className={`flex w-full items-center gap-4 rounded-2xl px-4 py-3.5 text-left text-[31px] tracking-tight transition ${
+                      active
+                        ? 'bg-[#07553f] font-semibold text-white'
+                        : 'text-[#a9c3bb] hover:bg-[#084734] hover:text-white'
+                    }`}
+                  >
+                    <Icon className="h-6 w-6" />
+                    <span>{label}</span>
+                  </button>
+                ))}
+              </nav>
 
-          <p className="text-xl text-slate-600 max-w-2xl mx-auto">
-            Describe your vision in natural language and watch as AI creates a complete,
-            production-ready website in seconds. No coding required.
-          </p>
+              <div className="mt-3 border-t border-[#0f5d49] p-4">
+                <button className="flex w-full items-center gap-4 rounded-2xl px-4 py-3.5 text-[31px] text-[#a9c3bb] transition hover:bg-[#084734] hover:text-white">
+                  <Globe className="h-6 w-6" />
+                  View Live Site
+                </button>
+              </div>
+            </aside>
 
-          {/* AI Generation Demo */}
-          <Card className="max-w-3xl mx-auto text-left shadow-xl">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Wand2 className="h-5 w-5 text-indigo-600" />
-                Try It Now
-              </CardTitle>
-              <CardDescription>
-                Describe the website you want to build
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {/* Example Prompts */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-700">
-                  Need inspiration? Try these examples:
-                </label>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                  {EXAMPLE_PROMPTS.map((example, index) => (
-                    <button
-                      key={index}
-                      onClick={() => handleExampleClick(example)}
-                      className="text-left text-xs p-3 rounded-lg border border-slate-200 hover:border-indigo-400 hover:bg-indigo-50 transition-all"
-                      disabled={loading}
-                    >
-                      <div className="flex items-start gap-2">
-                        <Sparkles className="h-3 w-3 text-indigo-600 mt-0.5 flex-shrink-0" />
-                        <span className="text-slate-600 line-clamp-2">{example}</span>
-                      </div>
-                    </button>
+            <main className="min-w-0 flex-1 bg-[#f8f9f8] p-4 sm:p-6">
+              <div className="mb-5 flex items-center justify-between">
+                <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl">Overview</h1>
+                <div className="flex gap-2">
+                  <button className="rounded-xl border border-[#d8ddd9] bg-white p-2.5 text-[#3d5750]">
+                    <Moon className="h-5 w-5" />
+                  </button>
+                  <button className="relative rounded-xl border border-[#d8ddd9] bg-white p-2.5 text-[#3d5750]">
+                    <Bell className="h-5 w-5" />
+                    <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-[#ff5f57]" />
+                  </button>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+                {stats.map((item) => (
+                  <section key={item.label} className="rounded-3xl border border-[#dce2de] bg-white p-5 shadow-sm">
+                    <div className="mb-3 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-[#dcfbef] text-3xl text-[#0e8f69]">
+                      {item.icon}
+                    </div>
+                    <p className="text-lg uppercase tracking-wide text-[#8b9692]">{item.label}</p>
+                    <p className="mt-1 text-5xl font-black tracking-tight text-[#081513]">{item.value}</p>
+                  </section>
+                ))}
+              </div>
+
+              <section className="mt-5 rounded-3xl border border-[#dce2de] bg-white p-5 shadow-sm">
+                <h2 className="mb-5 text-2xl font-bold">Revenue Overview</h2>
+                <div className="flex h-64 items-end gap-2 rounded-2xl bg-[#f4faf7] p-4 sm:gap-3">
+                  {[28, 40, 34, 52, 45, 63, 69, 56, 75, 82, 71, 94].map((height, i) => (
+                    <div key={i} className="relative flex-1">
+                      <div
+                        className="w-full rounded-t-xl bg-gradient-to-b from-[#2bd39a] to-[#119669]"
+                        style={{ height: `${height}%` }}
+                      />
+                    </div>
                   ))}
                 </div>
-              </div>
-
-              {/* Prompt Input */}
-              <div className="relative">
-                <textarea
-                  value={prompt}
-                  onChange={(e) => setPrompt(e.target.value)}
-                  placeholder="Example: Create a modern landing page for a SaaS startup with a hero section, features grid, pricing table, and contact form. Use a blue and purple gradient theme."
-                  className="w-full h-32 p-4 rounded-lg border border-slate-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none resize-none"
-                  disabled={loading}
-                />
-                <div className="absolute bottom-3 right-3 text-xs text-slate-400">
-                  {prompt.length} characters
-                </div>
-              </div>
-
-              {/* Validation Feedback */}
-              {prompt.length > 0 && prompt.length < 10 && (
-                <div className="flex items-center gap-2 text-sm text-amber-600">
-                  <AlertCircle className="h-4 w-4" />
-                  Please provide a more detailed description (at least 10 characters)
-                </div>
-              )}
-
-              {/* Generate Button */}
-              <Button
-                onClick={handleGenerate}
-                disabled={loading || prompt.trim().length < 10}
-                className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
-                size="lg"
-              >
-                {loading ? (
-                  <>
-                    <Sparkles className="animate-spin" />
-                    Generating Your Website...
-                  </>
-                ) : (
-                  <>
-                    <Rocket />
-                    Generate Website
-                  </>
-                )}
-              </Button>
-
-              {/* Result Display */}
-              {result && (
-                <div
-                  className={`p-4 rounded-lg ${
-                    result.success
-                      ? 'bg-green-50 border border-green-200'
-                      : 'bg-red-50 border border-red-200'
-                  }`}
-                >
-                  <div className="flex items-start gap-2">
-                    {result.success ? (
-                      <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5" />
-                    ) : (
-                      <AlertCircle className="h-5 w-5 text-red-600 mt-0.5" />
-                    )}
-                    <div className="flex-1">
-                      <p
-                        className={`font-medium mb-2 ${
-                          result.success ? 'text-green-800' : 'text-red-800'
-                        }`}
-                      >
-                        {result.message}
-                      </p>
-                      {result.code && (
-                        <div className="mt-3 space-y-2">
-                          <div className="flex items-center justify-between">
-                            <span className="text-xs font-medium text-green-700">
-                              Generated Code Preview
-                            </span>
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={handleCopyCode}
-                              className="h-7 text-xs"
-                            >
-                              {copied ? (
-                                <>
-                                  <CheckCircle2 className="h-3 w-3" />
-                                  Copied!
-                                </>
-                              ) : (
-                                <>
-                                  <Copy className="h-3 w-3" />
-                                  Copy Code
-                                </>
-                              )}
-                            </Button>
-                          </div>
-                          <pre className="text-xs bg-slate-900 text-green-400 p-4 rounded-lg overflow-x-auto max-h-60 font-mono">
-                            {result.code.substring(0, 1000)}
-                            {result.code.length > 1000 && '\n\n... (truncated)'}
-                          </pre>
-                          <p className="text-xs text-green-700">
-                            Total code length: {result.code.length} characters
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section className="container mx-auto px-4 py-20">
-        <div className="text-center mb-12">
-          <h3 className="text-3xl md:text-4xl font-bold mb-4">
-            Everything You Need to Build Amazing Websites
-          </h3>
-          <p className="text-xl text-slate-600">
-            Powerful AI-driven features that transform your ideas into reality
-          </p>
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-8">
-          <Card className="hover:shadow-lg transition-shadow">
-            <CardHeader>
-              <div className="h-12 w-12 rounded-lg bg-indigo-100 flex items-center justify-center mb-4">
-                <Sparkles className="h-6 w-6 text-indigo-600" />
-              </div>
-              <CardTitle>AI-Powered Generation</CardTitle>
-              <CardDescription>
-                Advanced AI models understand your vision and create custom websites tailored to your needs
-              </CardDescription>
-            </CardHeader>
-          </Card>
-
-          <Card className="hover:shadow-lg transition-shadow">
-            <CardHeader>
-              <div className="h-12 w-12 rounded-lg bg-purple-100 flex items-center justify-center mb-4">
-                <Code className="h-6 w-6 text-purple-600" />
-              </div>
-              <CardTitle>Clean, Production Code</CardTitle>
-              <CardDescription>
-                Generate Next.js, React, and TypeScript code that follows best practices and is ready to deploy
-              </CardDescription>
-            </CardHeader>
-          </Card>
-
-          <Card className="hover:shadow-lg transition-shadow">
-            <CardHeader>
-              <div className="h-12 w-12 rounded-lg bg-pink-100 flex items-center justify-center mb-4">
-                <Zap className="h-6 w-6 text-pink-600" />
-              </div>
-              <CardTitle>Instant Preview</CardTitle>
-              <CardDescription>
-                See your website come to life in real-time with WebContainer-based live previews
-              </CardDescription>
-            </CardHeader>
-          </Card>
-        </div>
-      </section>
-
-      {/* How It Works Section */}
-      <section className="container mx-auto px-4 py-20 bg-white/50 rounded-3xl my-20">
-        <div className="max-w-4xl mx-auto">
-          <h3 className="text-3xl md:text-4xl font-bold mb-12 text-center">
-            How It Works
-          </h3>
-          <div className="space-y-8">
-            <div className="flex items-start gap-4">
-              <div className="flex-shrink-0 h-12 w-12 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold">
-                1
-              </div>
-              <div>
-                <h4 className="text-xl font-semibold mb-2">Describe Your Vision</h4>
-                <p className="text-slate-600">
-                  Tell us what kind of website you want in plain English. Be as detailed or as brief as you like.
-                </p>
-              </div>
-            </div>
-            <div className="flex items-start gap-4">
-              <div className="flex-shrink-0 h-12 w-12 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold">
-                2
-              </div>
-              <div>
-                <h4 className="text-xl font-semibold mb-2">AI Generates Code</h4>
-                <p className="text-slate-600">
-                  Our AI analyzes your description and creates production-ready React components with TypeScript and Tailwind CSS.
-                </p>
-              </div>
-            </div>
-            <div className="flex items-start gap-4">
-              <div className="flex-shrink-0 h-12 w-12 rounded-full bg-pink-600 text-white flex items-center justify-center font-bold">
-                3
-              </div>
-              <div>
-                <h4 className="text-xl font-semibold mb-2">Preview & Deploy</h4>
-                <p className="text-slate-600">
-                  See your website instantly, make adjustments with AI chat, and deploy with one click.
-                </p>
-              </div>
-            </div>
+              </section>
+            </main>
           </div>
         </div>
-      </section>
-
-      {/* Stats Section */}
-      <section className="container mx-auto px-4 py-20">
-        <div className="grid md:grid-cols-4 gap-8 text-center">
-          <div>
-            <div className="text-4xl font-bold text-indigo-600 mb-2">10k+</div>
-            <div className="text-slate-600">Websites Generated</div>
-          </div>
-          <div>
-            <div className="text-4xl font-bold text-purple-600 mb-2">99%</div>
-            <div className="text-slate-600">Code Quality Score</div>
-          </div>
-          <div>
-            <div className="text-4xl font-bold text-pink-600 mb-2">&lt;30s</div>
-            <div className="text-slate-600">Average Generation Time</div>
-          </div>
-          <div>
-            <div className="text-4xl font-bold text-indigo-600 mb-2">24/7</div>
-            <div className="text-slate-600">AI Availability</div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="container mx-auto px-4 py-20">
-        <Card className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white border-0 shadow-2xl">
-          <CardContent className="py-16 text-center">
-            <h3 className="text-3xl md:text-4xl font-bold mb-4">
-              Ready to Build Your Dream Website?
-            </h3>
-            <p className="text-xl mb-8 text-indigo-100">
-              Join thousands of creators using AI to bring their ideas to life
-            </p>
-            <div className="flex gap-4 justify-center flex-wrap">
-              <Button size="lg" variant="secondary" className="shadow-lg">
-                <Rocket className="h-5 w-5" />
-                Get Started Free
-              </Button>
-              <Button size="lg" variant="outline" className="bg-transparent border-white text-white hover:bg-white/10">
-                <Code className="h-5 w-5" />
-                View Documentation
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </section>
-
-      {/* Footer */}
-      <footer className="border-t bg-white/80 backdrop-blur-sm">
-        <div className="container mx-auto px-4 py-8">
-          <div className="flex items-center justify-between flex-wrap gap-4">
-            <div className="flex items-center gap-2">
-              <Sparkles className="h-5 w-5 text-indigo-600" />
-              <span className="font-semibold text-slate-900">AI Web Builder</span>
-              <span className="text-slate-400">·</span>
-              <span className="text-sm text-slate-500">Made with ❤️ and AI</span>
-            </div>
-            <p className="text-sm text-slate-500">
-              Built with Next.js, TypeScript, and AI
-            </p>
-          </div>
-        </div>
-      </footer>
+      </div>
     </div>
   )
 }
