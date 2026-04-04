@@ -46,40 +46,45 @@ const stats = [
 export default function Home() {
   const [sidebarOpen, setSidebarOpen] = useState(true)
 
+  const getHeightClass = (height: number) => {
+    return `h-[${height}%]`
+  }
+
   return (
-    <div className="min-h-screen bg-[#f4f4f1] text-[#081513]">
+    <div className="min-h-screen bg-surface text-foreground">
       <div className="mx-auto w-full max-w-[1400px] px-3 py-4 sm:px-6 sm:py-6">
-        <header className="mb-4 flex items-center justify-between rounded-2xl bg-[#f9f9f7] px-4 py-3 sm:px-6">
+        <header className="mb-4 flex items-center justify-between rounded-2xl bg-surface-elevated px-4 py-3 sm:px-6">
           <div className="text-2xl font-semibold tracking-tight">two7-platform</div>
           <div className="flex items-center gap-2 sm:gap-3">
             <button
               onClick={() => setSidebarOpen((prev) => !prev)}
-              className="rounded-xl border border-[#d8d8d2] bg-white p-2.5 text-[#1c2e2a]"
+              className="rounded-xl border border-muted bg-white p-2.5 text-foreground"
               aria-label="Toggle sidebar"
             >
               {sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
-            <button className="hidden items-center gap-2 rounded-xl border border-[#d8d8d2] bg-white px-3 py-2 text-sm text-[#3a4f4a] sm:flex">
+            <button className="hidden items-center gap-2 rounded-xl border border-muted bg-white px-3 py-2 text-sm text-muted-foreground sm:flex">
               <Eye className="h-4 w-4" /> 1
             </button>
-            <button className="rounded-xl bg-[#081513] px-4 py-2.5 text-sm font-medium text-white">Customize</button>
+            <button className="rounded-xl bg-foreground px-4 py-2.5 text-sm font-medium text-white">Customize</button>
           </div>
         </header>
 
-        <div className="relative overflow-hidden rounded-3xl border border-[#d6d7d1] bg-white shadow-[0_16px_50px_rgba(5,28,22,0.08)]">
+        <div className="relative overflow-hidden rounded-3xl border border-border bg-white shadow-[0_16px_50px_rgba(5,28,22,0.08)]">
           <div className="flex min-h-[760px]">
             <aside
-              className={`z-20 w-[320px] shrink-0 border-r border-[#07563f] bg-[#013c2e] text-white transition-all duration-300 sm:w-[360px] ${
+              className={`z-20 w-[320px] shrink-0 border-r border-sidebar-border bg-sidebar text-sidebar-foreground transition-all duration-300 sm:w-[360px] ${
                 sidebarOpen ? 'translate-x-0' : '-ml-[320px] sm:-ml-[360px]'
               }`}
+              aria-hidden={!sidebarOpen}
             >
-              <div className="flex h-[88px] items-center justify-between border-b border-[#0f5d49] px-6">
+              <div className="flex h-[88px] items-center justify-between border-b border-sidebar-border px-6">
                 <div className="text-4xl font-black tracking-tight">
-                  Two7<span className="text-[#2dd39a]">.design</span>
+                  Two7<span className="text-sidebar-accent">.design</span>
                 </div>
                 <button
                   onClick={() => setSidebarOpen(false)}
-                  className="rounded-xl bg-[#0f5d49]/55 p-3 text-[#96cbbd]"
+                  className="rounded-xl bg-sidebar-border/55 p-3 text-sidebar-muted"
                   aria-label="Close sidebar"
                 >
                   <X className="h-5 w-5" />
@@ -92,8 +97,8 @@ export default function Home() {
                     key={label}
                     className={`flex w-full items-center gap-4 rounded-2xl px-4 py-3.5 text-left text-[31px] tracking-tight transition ${
                       active
-                        ? 'bg-[#07553f] font-semibold text-white'
-                        : 'text-[#a9c3bb] hover:bg-[#084734] hover:text-white'
+                        ? 'bg-sidebar-active font-semibold text-sidebar-foreground'
+                        : 'text-sidebar-muted hover:bg-sidebar-hover hover:text-sidebar-foreground'
                     }`}
                   >
                     <Icon className="h-6 w-6" />
@@ -102,48 +107,47 @@ export default function Home() {
                 ))}
               </nav>
 
-              <div className="mt-3 border-t border-[#0f5d49] p-4">
-                <button className="flex w-full items-center gap-4 rounded-2xl px-4 py-3.5 text-[31px] text-[#a9c3bb] transition hover:bg-[#084734] hover:text-white">
+              <div className="mt-3 border-t border-sidebar-border p-4">
+                <button className="flex w-full items-center gap-4 rounded-2xl px-4 py-3.5 text-[31px] text-sidebar-muted transition hover:bg-sidebar-hover hover:text-sidebar-foreground">
                   <Globe className="h-6 w-6" />
                   View Live Site
                 </button>
               </div>
             </aside>
 
-            <main className="min-w-0 flex-1 bg-[#f8f9f8] p-4 sm:p-6">
+            <main className="min-w-0 flex-1 bg-surface p-4 sm:p-6">
               <div className="mb-5 flex items-center justify-between">
                 <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl">Overview</h1>
                 <div className="flex gap-2">
-                  <button className="rounded-xl border border-[#d8ddd9] bg-white p-2.5 text-[#3d5750]">
-                    <Moon className="h-5 w-5" />
+                  <button className="rounded-xl border border-border bg-white p-2.5 text-muted-foreground" aria-label="Toggle dark mode">
+                    <Moon className="h-5 w-5" aria-hidden="true" />
                   </button>
-                  <button className="relative rounded-xl border border-[#d8ddd9] bg-white p-2.5 text-[#3d5750]">
-                    <Bell className="h-5 w-5" />
-                    <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-[#ff5f57]" />
+                  <button className="relative rounded-xl border border-border bg-white p-2.5 text-muted-foreground" aria-label="Notifications">
+                    <Bell className="h-5 w-5" aria-hidden="true" />
+                    <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-notification" aria-hidden="true" />
                   </button>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
                 {stats.map((item) => (
-                  <section key={item.label} className="rounded-3xl border border-[#dce2de] bg-white p-5 shadow-sm">
-                    <div className="mb-3 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-[#dcfbef] text-3xl text-[#0e8f69]">
+                  <section key={item.label} className="rounded-3xl border border-border bg-white p-5 shadow-sm">
+                    <div className="mb-3 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-icon-bg text-3xl text-icon-fg">
                       {item.icon}
                     </div>
-                    <p className="text-lg uppercase tracking-wide text-[#8b9692]">{item.label}</p>
-                    <p className="mt-1 text-5xl font-black tracking-tight text-[#081513]">{item.value}</p>
+                    <p className="text-lg uppercase tracking-wide text-muted-foreground">{item.label}</p>
+                    <p className="mt-1 text-5xl font-black tracking-tight text-foreground">{item.value}</p>
                   </section>
                 ))}
               </div>
 
-              <section className="mt-5 rounded-3xl border border-[#dce2de] bg-white p-5 shadow-sm">
+              <section className="mt-5 rounded-3xl border border-border bg-white p-5 shadow-sm">
                 <h2 className="mb-5 text-2xl font-bold">Revenue Overview</h2>
-                <div className="flex h-64 items-end gap-2 rounded-2xl bg-[#f4faf7] p-4 sm:gap-3">
+                <div className="flex h-64 items-end gap-2 rounded-2xl bg-icon-bg p-4 sm:gap-3">
                   {[28, 40, 34, 52, 45, 63, 69, 56, 75, 82, 71, 94].map((height, i) => (
                     <div key={i} className="relative flex-1">
                       <div
-                        className="w-full rounded-t-xl bg-gradient-to-b from-[#2bd39a] to-[#119669]"
-                        style={{ height: `${height}%` }}
+                        className={`w-full rounded-t-xl bg-gradient-to-b from-chart-from to-chart-to ${getHeightClass(height)}`}
                       />
                     </div>
                   ))}
