@@ -21,6 +21,20 @@
   --input: 214.3 31.8% 91.4%;
   --ring: 221.2 83.2% 53.3%;
   --radius: 0.5rem;
+  --surface: 60 20% 97.5%;
+  --surface-elevated: 60 20% 98%;
+  --sidebar: 163 100% 11.8%;
+  --sidebar-foreground: 0 0% 100%;
+  --sidebar-border: 163 88% 19%;
+  --sidebar-muted: 163 38% 72%;
+  --sidebar-accent: 163 90% 43%;
+  --sidebar-hover: 163 100% 14%;
+  --sidebar-active: 163 93% 18%;
+  --chart-from: 163 76% 49%;
+  --chart-to: 163 88% 32%;
+  --icon-bg: 163 82% 93%;
+  --icon-fg: 163 79% 31%;
+  --notification: 4 100% 67%;
 }
 
 @theme inline {
@@ -43,6 +57,20 @@
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
   --color-ring: hsl(var(--ring));
+  --color-surface: hsl(var(--surface));
+  --color-surface-elevated: hsl(var(--surface-elevated));
+  --color-sidebar: hsl(var(--sidebar));
+  --color-sidebar-foreground: hsl(var(--sidebar-foreground));
+  --color-sidebar-border: hsl(var(--sidebar-border));
+  --color-sidebar-muted: hsl(var(--sidebar-muted));
+  --color-sidebar-accent: hsl(var(--sidebar-accent));
+  --color-sidebar-hover: hsl(var(--sidebar-hover));
+  --color-sidebar-active: hsl(var(--sidebar-active));
+  --color-chart-from: hsl(var(--chart-from));
+  --color-chart-to: hsl(var(--chart-to));
+  --color-icon-bg: hsl(var(--icon-bg));
+  --color-icon-fg: hsl(var(--icon-fg));
+  --color-notification: hsl(var(--notification));
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -68,6 +96,20 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 224.3 76.3% 48%;
+    --surface: 222.2 84% 4.9%;
+    --surface-elevated: 217.2 32.6% 17.5%;
+    --sidebar: 163 100% 11.8%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-border: 163 88% 19%;
+    --sidebar-muted: 163 38% 72%;
+    --sidebar-accent: 163 76% 49%;
+    --sidebar-hover: 163 100% 14%;
+    --sidebar-active: 163 93% 18%;
+    --chart-from: 163 76% 49%;
+    --chart-to: 163 88% 32%;
+    --icon-bg: 163 82% 93%;
+    --icon-fg: 163 79% 31%;
+    --notification: 4 100% 67%;
   }
 }
 

@@ -43,6 +43,28 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        surface: {
+          DEFAULT: "hsl(var(--surface))",
+          elevated: "hsl(var(--surface-elevated))",
+        },
+        sidebar: {
+          DEFAULT: "hsl(var(--sidebar))",
+          foreground: "hsl(var(--sidebar-foreground))",
+          border: "hsl(var(--sidebar-border))",
+          muted: "hsl(var(--sidebar-muted))",
+          accent: "hsl(var(--sidebar-accent))",
+          hover: "hsl(var(--sidebar-hover))",
+          active: "hsl(var(--sidebar-active))",
+        },
+        chart: {
+          from: "hsl(var(--chart-from))",
+          to: "hsl(var(--chart-to))",
+        },
+        icon: {
+          bg: "hsl(var(--icon-bg))",
+          fg: "hsl(var(--icon-fg))",
+        },
+        notification: "hsl(var(--notification))",
       },
       borderRadius: {
         lg: "var(--radius)",
