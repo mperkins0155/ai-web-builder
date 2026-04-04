@@ -43,7 +43,73 @@ const stats = [
   { label: 'Appointments', value: '12', icon: '⌁' },
 ]
 
+/**
+ * Root client-side page component that renders the AI Web Builder interface.
+ *
+ * Provides a UI for entering natural-language prompts, triggering site generation
+ * (POST /api/ai/generate), displaying success/error results and a code preview,
+ * and copying generated code to the clipboard.
+ *
+ * @returns The rendered JSX element for the Home page.
+ */
 export default function Home() {
+  const [prompt, setPrompt] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [result, setResult] = useState<{ success: boolean; message?: string; code?: string } | null>(null)
+  const [copied, setCopied] = useState(false)
+
+  const handleGenerate = async () => {
+    if (!prompt.trim()) return
+
+    setLoading(true)
+    setResult(null)
+
+    try {
+      const response = await fetch('/api/ai/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          prompt,
+          style: 'modern',
+        }),
+      })
+
+      const data = await response.json()
+
+      if (data.success) {
+        setResult({
+          success: true,
+          message: 'Website generated successfully!',
+          code: data.pages?.[0]?.code || '',
+        })
+      } else {
+        setResult({
+          success: false,
+          message: data.error || 'Failed to generate website',
+        })
+      }
+    } catch {
+      setResult({
+        success: false,
+        message: 'An error occurred. Please try again.',
+      })
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleCopyCode = async () => {
+    if (result?.code) {
+      await navigator.clipboard.writeText(result.code)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    }
+  }
+
+  const handleExampleClick = (example: string) => {
+    setPrompt(example)
+    setResult(null)
+  }
   const [sidebarOpen, setSidebarOpen] = useState(true)
 
   return (
